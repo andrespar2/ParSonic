@@ -2,7 +2,7 @@ package com.andrespar2.parsonic.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -68,7 +68,7 @@ fun ParSonicApp(container: AppContainer) {
                 navigationIcon = {
                     if (currentDestination?.topLevel == false) {
                         IconButton(onClick = { navController.navigateUp() }) {
-                            Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
                         }
                     }
                 },
