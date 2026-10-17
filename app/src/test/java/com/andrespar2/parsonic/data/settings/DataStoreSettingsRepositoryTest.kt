@@ -73,14 +73,14 @@ class DataStoreSettingsRepositoryTest {
     }
 
     @Test
-    fun `persiste la accion y la sensibilidad de un gesto`() = runTest {
+    fun `persiste la accion de un gesto y la sensibilidad global`() = runTest {
         val repository = newRepository()
         repository.setGestureAction(GestureType.SWIPE_LEFT, GestureAction.PAUSE)
-        repository.setGestureSensitivity(GestureType.SWIPE_LEFT, Sensitivity.HIGH)
+        repository.setSensitivity(Sensitivity.HIGH)
 
-        val binding = repository.settings.first().bindingOf(GestureType.SWIPE_LEFT)
-        assertEquals(GestureAction.PAUSE, binding.action)
-        assertEquals(Sensitivity.HIGH, binding.sensitivity)
+        val settings = repository.settings.first()
+        assertEquals(GestureAction.PAUSE, settings.bindingOf(GestureType.SWIPE_LEFT).action)
+        assertEquals(Sensitivity.HIGH, settings.sensitivity)
     }
 
     @Test
@@ -113,12 +113,14 @@ class DataStoreSettingsRepositoryTest {
         val repository = newRepository()
         repository.setGestureAction(GestureType.SWIPE_LEFT, GestureAction.STOP)
         repository.setGestureEnabled(GestureType.DOUBLE_TAP, false)
+        repository.setSensitivity(Sensitivity.HIGH)
 
         repository.resetGestures()
 
         val settings = repository.settings.first()
         assertEquals(GestureAction.PREVIOUS, settings.bindingOf(GestureType.SWIPE_LEFT).action)
         assertTrue(settings.bindingOf(GestureType.DOUBLE_TAP).enabled)
+        assertEquals(Sensitivity.MEDIUM, settings.sensitivity)
     }
 
     @Test
@@ -132,6 +134,7 @@ class DataStoreSettingsRepositoryTest {
         )
         writing.setGestureAction(GestureType.SWIPE_UP, GestureAction.NEXT)
         writing.setHapticFeedback(false)
+        writing.setSensitivity(Sensitivity.LOW)
         writingScope.cancel()
 
         // Segunda instancia: DataStore no permite dos lectores activos del mismo archivo.
@@ -145,13 +148,11 @@ class DataStoreSettingsRepositoryTest {
         val settings = reading.settings.first()
         assertEquals(GestureAction.NEXT, settings.bindingOf(GestureType.SWIPE_UP).action)
         assertFalse(settings.hapticFeedback)
+        assertEquals(Sensitivity.LOW, settings.sensitivity)
     }
 
     @Test
     fun `la sensibilidad por defecto de un gesto recien reseteado es media`() = runTest {
-        val repository = newRepository()
-        repository.setGestureSensitivity(GestureType.SWIPE_DOWN, Sensitivity.LOW)
-        repository.resetGestures()
-        assertEquals(Sensitivity.MEDIUM, repository.settings.first().bindingOf(GestureType.SWIPE_DOWN).sensitivity)
+        // Este test ya queda cubierto en resetGestures.
     }
 }

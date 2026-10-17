@@ -3,14 +3,17 @@ package com.andrespar2.parsonic.data.settings.model
 import com.andrespar2.parsonic.core.ParSonicConstants
 
 /**
- * Configuracion de un gesto concreto: si esta activo, que hace y con que
- * sensibilidad se reconoce.
+ * Configuracion de un gesto concreto: si esta activo y que hace.
+ *
+ * La sensibilidad no es por gesto sino global (ver [AppSettings.sensitivity]):
+ * un unico reconocedor por zona decide el gesto, y los umbrales de
+ * deslizamiento y de toque se mueven en direcciones opuestas al subir la
+ * sensibilidad, por lo que mezclarlos por gesto seria enganoso.
  */
 data class GestureBinding(
     val type: GestureType,
     val enabled: Boolean,
-    val action: GestureAction,
-    val sensitivity: Sensitivity
+    val action: GestureAction
 ) {
     /** `true` si el gesto esta activo y ademas tiene una accion util. */
     val isEffective: Boolean
@@ -45,6 +48,9 @@ data class AppSettings(
 
     /** Ancho de las zonas laterales de gesto, en dp. */
     val edgeZoneWidthDp: Int = ParSonicConstants.DEFAULT_EDGE_ZONE_WIDTH_DP,
+
+    /** Sensibilidad global del reconocimiento de gestos. */
+    val sensitivity: Sensitivity = Sensitivity.MEDIUM,
 
     /** Mostrar una zona de gesto adicional en el borde inferior. */
     val bottomZoneEnabled: Boolean = true,
@@ -88,8 +94,7 @@ data class AppSettings(
         fun defaultBinding(type: GestureType): GestureBinding = GestureBinding(
             type = type,
             enabled = type.defaultAction != GestureAction.NONE,
-            action = type.defaultAction,
-            sensitivity = Sensitivity.MEDIUM
+            action = type.defaultAction
         )
 
         /** Mapa con la configuracion por defecto de todos los gestos. */

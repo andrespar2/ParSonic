@@ -64,6 +64,9 @@ class DataStoreSettingsRepository(
                 ParSonicConstants.MIN_EDGE_ZONE_WIDTH_DP,
                 ParSonicConstants.MAX_EDGE_ZONE_WIDTH_DP
             ),
+        sensitivity = Sensitivity.fromId(
+            this[Keys.SENSITIVITY] ?: AppSettings.DEFAULT.sensitivity.id
+        ),
         bottomZoneEnabled = this[Keys.BOTTOM_ZONE] ?: AppSettings.DEFAULT.bottomZoneEnabled,
         showGestureHints = this[Keys.SHOW_HINTS] ?: AppSettings.DEFAULT.showGestureHints,
         hapticFeedback = this[Keys.HAPTIC] ?: AppSettings.DEFAULT.hapticFeedback,
@@ -74,10 +77,6 @@ class DataStoreSettingsRepository(
                     ?: AppSettings.defaultBinding(type).enabled,
                 action = GestureAction.fromId(
                     this[Keys.gestureAction(type)] ?: AppSettings.defaultBinding(type).action.id
-                ),
-                sensitivity = Sensitivity.fromId(
-                    this[Keys.gestureSensitivity(type)]
-                        ?: AppSettings.defaultBinding(type).sensitivity.id
                 )
             )
         }
@@ -90,6 +89,7 @@ class DataStoreSettingsRepository(
         this[Keys.TOUCH_GESTURES] = settings.touchGesturesEnabled
         this[Keys.SENSOR_GESTURES] = settings.sensorGesturesEnabled
         this[Keys.EDGE_ZONE_WIDTH] = settings.edgeZoneWidthDp
+        this[Keys.SENSITIVITY] = settings.sensitivity.id
         this[Keys.BOTTOM_ZONE] = settings.bottomZoneEnabled
         this[Keys.SHOW_HINTS] = settings.showGestureHints
         this[Keys.HAPTIC] = settings.hapticFeedback
@@ -98,7 +98,6 @@ class DataStoreSettingsRepository(
             val binding = settings.bindingOf(type)
             this[Keys.gestureEnabled(type)] = binding.enabled
             this[Keys.gestureAction(type)] = binding.action.id
-            this[Keys.gestureSensitivity(type)] = binding.sensitivity.id
         }
     }
 
@@ -110,6 +109,7 @@ class DataStoreSettingsRepository(
         val TOUCH_GESTURES = booleanPreferencesKey("touch_gestures_enabled")
         val SENSOR_GESTURES = booleanPreferencesKey("sensor_gestures_enabled")
         val EDGE_ZONE_WIDTH = intPreferencesKey("edge_zone_width_dp")
+        val SENSITIVITY = stringPreferencesKey("sensitivity")
         val BOTTOM_ZONE = booleanPreferencesKey("bottom_zone_enabled")
         val SHOW_HINTS = booleanPreferencesKey("show_gesture_hints")
         val HAPTIC = booleanPreferencesKey("haptic_feedback")
@@ -119,9 +119,6 @@ class DataStoreSettingsRepository(
 
         fun gestureAction(type: GestureType) =
             stringPreferencesKey("gesture_${type.id}_action")
-
-        fun gestureSensitivity(type: GestureType) =
-            stringPreferencesKey("gesture_${type.id}_sensitivity")
     }
 
     private companion object {

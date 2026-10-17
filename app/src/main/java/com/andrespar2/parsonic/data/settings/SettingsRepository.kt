@@ -64,6 +64,10 @@ interface SettingsRepository {
     suspend fun setHapticFeedback(enabled: Boolean) =
         update { it.copy(hapticFeedback = enabled) }
 
+    /** Cambia la sensibilidad global del reconocimiento. */
+    suspend fun setSensitivity(sensitivity: Sensitivity) =
+        update { it.copy(sensitivity = sensitivity) }
+
     /** Activa o desactiva un gesto concreto. */
     suspend fun setGestureEnabled(type: GestureType, enabled: Boolean) =
         updateBinding(type) { it.copy(enabled = enabled) }
@@ -72,11 +76,7 @@ interface SettingsRepository {
     suspend fun setGestureAction(type: GestureType, action: GestureAction) =
         updateBinding(type) { it.copy(action = action) }
 
-    /** Cambia la sensibilidad de un gesto. */
-    suspend fun setGestureSensitivity(type: GestureType, sensitivity: Sensitivity) =
-        updateBinding(type) { it.copy(sensitivity = sensitivity) }
-
     /** Devuelve todos los gestos a su configuracion de fabrica. */
     suspend fun resetGestures() =
-        update { it.copy(bindings = AppSettings.defaultBindings()) }
+        update { it.copy(bindings = AppSettings.defaultBindings(), sensitivity = AppSettings.DEFAULT.sensitivity) }
 }

@@ -2,7 +2,6 @@ package com.andrespar2.parsonic.data.settings.model
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -105,6 +104,10 @@ class GestureModelTest {
         val binding = AppSettings.defaultBinding(GestureType.DOUBLE_TAP)
         assertTrue(binding.enabled)
         assertEquals(GestureAction.TOGGLE_PLAY_PAUSE, binding.action)
-        assertNotNull(binding.sensitivity)
+    }
+
+    @Test
+    fun `la sensibilidad por defecto es media y es global`() {
+        assertEquals(Sensitivity.MEDIUM, AppSettings.DEFAULT.sensitivity)
     }
 }
