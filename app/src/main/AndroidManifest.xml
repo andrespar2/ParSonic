@@ -23,6 +23,17 @@
     <!-- Inicio automatico opcional tras reiniciar el dispositivo. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!--
+      Visibilidad de paquetes: permite leer el nombre legible de las apps que
+      publican una sesion multimedia (Spotify, YouTube Music, VLC...).
+      Es una declaracion de consulta, no un permiso de acceso a datos.
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.media.browse.MediaBrowserService" />
+        </intent>
+    </queries>
+
     <application
         android:name=".ParSonicApplication"
         android:allowBackup="true"
