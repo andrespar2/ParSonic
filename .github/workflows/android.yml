@@ -1,0 +1,63 @@
+name: Android CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Compilar y probar
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Preparar Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: >-
+            platform-tools
+            platforms;android-35
+            build-tools;35.0.0
+
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Ejecutar las pruebas unitarias
+        run: ./gradlew :app:testDebugUnitTest --no-daemon --console=plain
+
+      - name: Compilar el APK de depuracion
+        run: ./gradlew :app:assembleDebug --no-daemon --console=plain
+
+      - name: Publicar el informe de pruebas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: informes-pruebas
+          path: app/build/reports/tests/testDebugUnitTest/
+          if-no-files-found: ignore
+
+      - name: Publicar el APK de depuracion
+        uses: actions/upload-artifact@v4
+        with:
+          name: parsonic-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
