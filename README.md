@@ -20,6 +20,10 @@ Escrita en Kotlin con Jetpack Compose, siguiendo el patrón MVVM y apoyándose
   - De sensor: agitar el dispositivo y girarlo boca abajo.
   - Golpe con la pantalla apagada mediante el sensor de *movimiento
     significativo* (si el dispositivo lo tiene).
+- **Usa los botones de volumen como mando** (opcional): una pulsación cambia de
+  pista (subir = siguiente, bajar = anterior) y una doble pulsación rápida ajusta
+  el volumen; si dejas de pulsar durante 7 s, los botones vuelven a cambiar de
+  pista.
 - **Ahorra batería de verdad**: el reconocimiento solo está activo mientras hay
   música sonando (configurable), sin sondeos periódicos, sin *wakelocks* y
   liberando los sensores en cuanto no se necesitan.
@@ -39,12 +43,17 @@ Consulta [`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md) para saber con detalle
   ParSonic, y no se simula ni se promete lo que el sistema no permite.
 - Para la **pantalla apagada** existe una alternativa real: el sensor de
   *movimiento significativo* (coste de batería prácticamente nulo).
+- Los **botones de volumen** requieren activar el *servicio de accesibilidad* de
+  ParSonic (solo filtra las teclas de volumen; no lee la pantalla). Con la
+  pantalla apagada, el comportamiento depende del sistema y del fabricante.
 
 ## Requisitos
 
 - Android 8.0 (API 26) o superior.
 - Acceso a notificaciones (para detectar el reproductor activo).
 - Permiso para dibujar sobre otras apps (para las zonas de gesto táctiles).
+- Servicio de accesibilidad (**opcional**, solo si quieres usar los botones de
+  volumen como mando).
 
 ## Compilar
 
@@ -88,6 +97,7 @@ Resumen en [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Capas:
 core/     constantes, utilidades (registro, háptica, geometría de pantalla, permisos)
 data/     media (sesiones/reproducción/volumen) y settings (modelo + DataStore)
 service/  GestureService, ventanas de superposición, sensores, notificación, arranque
+service/volume/  servicio de accesibilidad opcional + intérprete de botones de volumen
 di/       AppContainer (inyección manual)
 ui/       Compose + ViewModels (Inicio, Gestos, Reproductor, Ajustes, Permisos, ...)
 ```

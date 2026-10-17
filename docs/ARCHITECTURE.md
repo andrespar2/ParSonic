@@ -2,8 +2,10 @@
 
 ## Principios
 
-1. **Solo APIs públicas de Android.** Sin `AccessibilityService`, sin root, sin
-   APIs privadas ni reflexión sobre clases internas.
+1. **Solo APIs públicas de Android.** Sin root, sin APIs privadas ni reflexión
+   sobre clases internas. La única concesión es un `AccessibilityService` mínimo
+   y **opcional** que solo filtra las teclas de volumen (nunca lee el contenido de
+   la pantalla). Está apagado por defecto y el usuario lo activa a voluntad.
 2. **Lógica pura y comprobable.** Todo lo que se puede decidir sin el framework
    (reconocimiento de gestos, geometría de zonas, evaluación de sensores,
    despacho de acciones, persistencia) vive en clases sin dependencias de Android
@@ -36,7 +38,9 @@ com.andrespar2.parsonic
 │   ├── dispatcher/       GestureActionDispatcher
 │   ├── gesture/          GestureInterpreter, GestureZone(+Calculator), TouchPhase
 │   ├── overlay/          EdgeZoneView, GestureOverlayController
-│   └── sensors/          MotionGestureEvaluator, SensorGestureController
+│   ├── sensors/          MotionGestureEvaluator, SensorGestureController
+│   └── volume/           VolumeKeyAccessibilityService, VolumeKeyInterpreter,
+│                         VolumeKeyAction
 └── ui/                   Jetpack Compose + ViewModels
     ├── ParSonicApp.kt, ParSonicViewModelFactory.kt
     ├── home/ gestures/ player/ settings/ permissions/ compatibility/ credits/
@@ -102,6 +106,33 @@ doble toque y la pulsación larga.
 
 `MotionGestureEvaluator` (puro) recibe muestras `(x, y, z, t)` filtradas y devuelve
 `SHAKE` o `FLIP_DOWN` con ventanas y periodos de *debounce*.
+
+## Botones de volumen (servicio de accesibilidad opcional)
+
+Interceptar las teclas de volumen de forma global y **consumirlas** no es posible
+con las APIs públicas de `MediaSession`, `AudioManager` ni con *broadcasts*:
+Android solo entrega (y permite consumir) teclas físicas a un
+`AccessibilityService` con `flagRequestFilterKeyEvents`. ParSonic incluye uno
+mínimo (`VolumeKeyAccessibilityService`):
+
+- Declara solo `TYPE_WINDOW_STATE_CHANGED` y `onAccessibilityEvent` está vacío:
+  **no** lee el contenido de la pantalla (`canRetrieveWindowContent=false`) ni
+  ejecuta gestos (`canPerformGestures=false`).
+- `onKeyEvent` filtra únicamente `KEYCODE_VOLUME_UP`/`KEYCODE_VOLUME_DOWN` y
+  consume el evento solo si `volumeKeysEnabled` está activo y hay una sesión
+  multimedia con contenido (`nowPlaying != null`).
+- `VolumeKeyInterpreter` (puro) decide en una máquina de estados:
+  - Una pulsación sola → siguiente (subir) o anterior (bajar).
+  - Dos pulsaciones dentro de la ventana de 400 ms → en lugar de eso, ajusta el
+    volumen y entra en «modo volumen».
+  - El modo volumen caduca por **pereza** (sin temporizador propio): 7 s después
+    de la última pulsación, la siguiente vuelve a cambiar de pista.
+- `onServiceConnected` llama a `AppContainer.acquireMedia()` y `onDestroy` lo
+  libera, respetando el recuento de referencias.
+
+La app expone el interruptor (Inicio y Ajustes) y un acceso directo a los ajustes
+de accesibilidad del sistema. La función está **desactivada por defecto** y, con
+la pantalla apagada, depende del sistema y del fabricante.
 
 ## Inyección de dependencias
 

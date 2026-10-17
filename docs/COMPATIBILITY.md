@@ -13,6 +13,7 @@ es posible, ParSonic lo dice en vez de fingirlo.
 | Permiso clave | Acceso a notificaciones (para leer sesiones multimedia) |
 | Permiso de gestos táctiles | Dibujar sobre otras apps (`SYSTEM_ALERT_WINDOW`) |
 | Permiso de servicio | Servicio en primer plano (`specialUse`) + notificaciones (Android 13+) |
+| Botones de volumen | Servicio de accesibilidad (**opcional**, solo filtra las teclas de volumen) |
 | Reinicio automático | `RECEIVE_BOOT_COMPLETED` (opcional) |
 
 ## Qué controla ParSonic
@@ -57,6 +58,21 @@ pantalla apagada. Es de un solo disparo, así que ParSonic lo vuelve a armar tra
 cada aviso. No todos los dispositivos lo exponen; la pantalla de Compatibilidad
 de la app indica si el tuyo lo tiene.
 
+## Botones de volumen como mando (opcional)
+
+Además de los gestos, ParSonic puede dar otro uso a los botones de volumen:
+
+- Una pulsación → **siguiente** (subir) o **anterior** (bajar).
+- Dos pulsaciones rápidas → **ajustar el volumen** y entrar en «modo volumen».
+- Tras **7 segundos** sin pulsar, los botones vuelven a cambiar de pista.
+
+Para poder interceptar y **consumir** las teclas de volumen hace falta un
+`AccessibilityService` con `flagRequestFilterKeyEvents`: es la única vía pública;
+`MediaSession`, `AudioManager` y los *broadcasts* no permiten consumir una tecla
+física. El servicio de ParSonic es mínimo y solo filtra las teclas de volumen (no
+lee la pantalla). La función es **opcional y está apagada por defecto**: se activa
+desde Inicio o Ajustes.
+
 ## Limitaciones que no se pueden sortear
 
 1. **Pantalla apagada y toques:** imposible para cualquier app sin root. Android
@@ -67,6 +83,9 @@ de la app indica si el tuyo lo tiene.
 3. **Acciones no soportadas por el reproductor:** si la app no declara la acción,
    no existe.
 4. **Fabricantes agresivos con el segundo plano:** ver sección siguiente.
+5. **Botones de volumen con la pantalla apagada:** depende del sistema y del
+   fabricante; algunos no entregan las pulsaciones al servicio con la pantalla
+   apagada. Con la pantalla encendida funciona en cualquier dispositivo.
 
 ## Fabricantes y segundo plano
 
@@ -92,5 +111,6 @@ en el manifiesto. No reproduce audio, por lo que no puede usar los tipos
 | Volumen/silenciar | Disponible | Sesión activa |
 | Gestos táctiles | Disponible con pantalla encendida | Overlay + pantalla encendida |
 | Agitar / boca abajo | Disponible con acelerómetro | Pantalla encendida |
+| Botones de volumen como mando | Disponible con pantalla encendida | Servicio de accesibilidad + sesión activa |
 | Golpe en pantalla apagada | Disponible si existe el sensor | `TYPE_SIGNIFICANT_MOTION` |
 | Inicio automático tras reinicio | Disponible | `RECEIVE_BOOT_COMPLETED` + autostart del fabricante |

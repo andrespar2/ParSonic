@@ -10,6 +10,7 @@ Internet y no incorpora analítica, publicidad ni rastreadores de ningún tipo.
 | **Acceso a notificaciones** (`BIND_NOTIFICATION_LISTENER_SERVICE`) | Es la única vía pública para que `MediaSessionManager` entregue las **sesiones multimedia activas** de otras apps. Se usa como "llave" de acceso y para saber cuándo cambian. | No lee el contenido de tus notificaciones, ni las guarda, ni las envía a ningún sitio. |
 | **Dibujar sobre otras apps** (`SYSTEM_ALERT_WINDOW`) | Crear las franjas transparentes de gesto en los bordes de la pantalla. | No captura la pantalla ni lee lo que muestran otras apps. |
 | **Servicio en primer plano** (`specialUse`) | Mantener activos los listener de gestos mientras el usuario lo autoriza. | No reproduce audio ni accede a tu ubicación. |
+| **Servicio de accesibilidad** (`BIND_ACCESSIBILITY_SERVICE`) | Detectar las pulsaciones de los botones de volumen para usarlos como mando. Es **opcional** (apagado por defecto). | No lee el contenido de la pantalla (`canRetrieveWindowContent=false`), no ejecuta gestos ajenos y no observa ninguna otra tecla. |
 | **Notificaciones** (`POST_NOTIFICATIONS`) | Mostrar la notificación obligatoria del servicio (Android 13+). | — |
 | **Reinicio** (`RECEIVE_BOOT_COMPLETED`) | Reiniciar el servicio tras un reinicio, **solo si el usuario lo activa**. | — |
 
@@ -22,6 +23,7 @@ Solo preferencias en el propio dispositivo, mediante **Jetpack DataStore**
 (almacenamiento privado de la app):
 
 - Interruptor maestro y arranque automático.
+- Si el uso de los **botones de volumen** como mando está activo.
 - Qué gestos están activos y qué acción hace cada uno.
 - Sensibilidad global.
 - Ajuste de "solo mientras suena música".
