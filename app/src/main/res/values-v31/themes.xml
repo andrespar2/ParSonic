@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Splash nativo de Android 12+ en negro puro. -->
+    <style name="Theme.ParSonic.Splash" parent="Theme.ParSonic">
+        <item name="android:windowSplashScreenBackground">@color/parsonic_black</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/parsonic_black</item>
+    </style>
+</resources>

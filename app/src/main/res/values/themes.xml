@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Tema base: negro puro AMOLED, sin ActionBar. -->
+    <style name="Theme.ParSonic" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/parsonic_black</item>
+        <item name="android:colorBackground">@color/parsonic_black</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
+    <!-- Variante de arranque para pantallas con splash (Android 12+). -->
+    <style name="Theme.ParSonic.Splash" parent="Theme.ParSonic" />
+
+</resources>

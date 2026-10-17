@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Marca de ParSonic: triangulo de reproduccion + ondas sonicas. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Triangulo de reproduccion -->
+    <path
+        android:fillColor="#FFFF1744"
+        android:pathData="M38,40 L38,68 L62,54 Z" />
+
+    <!-- Onda sonica interior -->
+    <path
+        android:strokeColor="#FFFF1744"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:pathData="M68,46 A10,10 0 0 1 68,62" />
+
+    <!-- Onda sonica exterior -->
+    <path
+        android:strokeColor="#FFFF1744"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:pathData="M74,40 A15,15 0 0 1 74,68" />
+
+</vector>

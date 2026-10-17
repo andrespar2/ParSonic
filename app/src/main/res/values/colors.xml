@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="parsonic_black">#FF000000</color>
+    <color name="parsonic_surface">#FF0A0A0A</color>
+    <color name="parsonic_red">#FFFF1744</color>
+    <color name="parsonic_white">#FFFFFFFF</color>
+    <color name="ic_launcher_background">#FF000000</color>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ParSonic</string>
+    <string name="notification_listener_label">ParSonic · Deteccion de reproductores</string>
+    <string name="gesture_channel_name">Control por gestos</string>
+    <string name="gesture_channel_description">Notificacion persistente del servicio de gestos de ParSonic</string>
+    <string name="gesture_notification_title">ParSonic activo</string>
+    <string name="gesture_notification_text_idle">Esperando reproduccion activa</string>
+    <string name="gesture_notification_text_playing">Gestos activos · %1$s</string>
+    <string name="gesture_notification_stop">Desactivar</string>
+</resources>

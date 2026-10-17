@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copia de seguridad (Android 11 y anteriores): solo los ajustes de la app. -->
+<full-backup-content>
+    <include domain="file" path="datastore" />
+</full-backup-content>
