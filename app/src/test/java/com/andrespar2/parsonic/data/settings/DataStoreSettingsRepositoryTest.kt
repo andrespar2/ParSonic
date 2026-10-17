@@ -10,6 +10,7 @@ import java.io.File
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -128,14 +129,20 @@ class DataStoreSettingsRepositoryTest {
         val file = File(temporaryFolder.root, "persistencia.preferences_pb")
 
         // Primera instancia: escribe y libera el archivo al cancelar su scope.
-        val writingScope = CoroutineScope(Job())
+        // Se espera a que la cancelacion termine de verdad: DataStore libera el
+        // bloqueo del archivo en un manejador de finalizacion, asi que crear la
+        // segunda instancia sin esperar daria un resultado no determinista.
+        val writingJob = Job()
         val writing = DataStoreSettingsRepository(
-            PreferenceDataStoreFactory.create(scope = writingScope, produceFile = { file })
+            PreferenceDataStoreFactory.create(
+                scope = CoroutineScope(writingJob),
+                produceFile = { file }
+            )
         )
         writing.setGestureAction(GestureType.SWIPE_UP, GestureAction.NEXT)
         writing.setHapticFeedback(false)
         writing.setSensitivity(Sensitivity.LOW)
-        writingScope.cancel()
+        writingJob.cancelAndJoin()
 
         // Segunda instancia: DataStore no permite dos lectores activos del mismo archivo.
         val reading = DataStoreSettingsRepository(
