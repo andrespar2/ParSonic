@@ -8,4 +8,7 @@
     <string name="gesture_notification_text_idle">Esperando reproduccion activa</string>
     <string name="gesture_notification_text_playing">Gestos activos · %1$s</string>
     <string name="gesture_notification_stop">Desactivar</string>
+    <string name="accessibility_service_label">ParSonic · Botones de volumen</string>
+    <string name="accessibility_service_summary">Controla la musica con los botones de volumen</string>
+    <string name="accessibility_service_description">Subir volumen = siguiente cancion; bajar volumen = anterior. Doble pulsacion rapida = ajustar el volumen (y vuelve a cambiar de cancion a los 7 segundos). Funciona tambien con la pantalla apagada. ParSonic solo filtra las teclas de volumen: no lee la pantalla ni el contenido de otras aplicaciones.</string>
 </resources>

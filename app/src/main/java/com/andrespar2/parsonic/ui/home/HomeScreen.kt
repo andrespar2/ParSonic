@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -97,6 +98,14 @@ fun HomeScreen(
             )
         }
 
+        SectionTitle("Botones de volumen")
+        VolumeKeysCard(
+            enabled = state.settings.volumeKeysEnabled,
+            accessibilityGranted = permissions.accessibility,
+            onToggle = viewModel::setVolumeKeysEnabled,
+            onOpenAccessibility = viewModel::openAccessibilitySettings
+        )
+
         SectionTitle("Ahora suena")
         NowPlayingCard(state.nowPlaying)
 
@@ -131,6 +140,62 @@ private fun MasterCard(
                 )
             }
             Switch(checked = settings.serviceEnabled, onCheckedChange = onToggle)
+        }
+    }
+}
+
+@Composable
+private fun VolumeKeysCard(
+    enabled: Boolean,
+    accessibilityGranted: Boolean,
+    onToggle: (Boolean) -> Unit,
+    onOpenAccessibility: () -> Unit
+) {
+    ParSonicCard {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Subir = siguiente · Bajar = anterior",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = "Doble pulsacion rapida: ajustar el volumen (vuelve a cambiar de " +
+                        "cancion a los 7 segundos). Funciona con la pantalla apagada.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(Modifier.height(8.dp))
+                StatusPill(
+                    text = when {
+                        !enabled -> "Desactivado"
+                        accessibilityGranted -> "Activo"
+                        else -> "Falta la accesibilidad"
+                    },
+                    color = when {
+                        !enabled -> ParGreyDim
+                        accessibilityGranted -> ParGreen
+                        else -> ParAmber
+                    }
+                )
+            }
+            Spacer(Modifier.width(14.dp))
+            Switch(checked = enabled, onCheckedChange = onToggle)
+        }
+
+        if (enabled && !accessibilityGranted) {
+            Spacer(Modifier.height(12.dp))
+            InfoBanner(
+                text = "Para usar los botones de volumen hay que activar el servicio de " +
+                    "accesibilidad de ParSonic (solo filtra las teclas de volumen).",
+                tone = ParAmber,
+                icon = Icons.Filled.Lock
+            )
+            Spacer(Modifier.height(10.dp))
+            Button(onClick = onOpenAccessibility, modifier = Modifier.fillMaxWidth()) {
+                Text("Abrir ajustes de accesibilidad")
+            }
         }
     }
 }

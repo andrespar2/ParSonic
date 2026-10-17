@@ -46,6 +46,14 @@ data class AppSettings(
     /** Habilitar gestos de sensores (agitar, girar). */
     val sensorGesturesEnabled: Boolean = false,
 
+    /**
+     * Controlar la musica con los botones de volumen: una pulsacion cambia de
+     * pista (subir = siguiente, bajar = anterior) y una doble pulsacion rapida
+     * ajusta el volumen durante unos segundos. Requiere que el usuario habilite
+     * el servicio de accesibilidad de ParSonic.
+     */
+    val volumeKeysEnabled: Boolean = false,
+
     /** Ancho de las zonas laterales de gesto, en dp. */
     val edgeZoneWidthDp: Int = ParSonicConstants.DEFAULT_EDGE_ZONE_WIDTH_DP,
 

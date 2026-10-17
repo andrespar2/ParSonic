@@ -41,6 +41,27 @@ object ParSonicPermissions {
     }
 
     /**
+     * `true` si el servicio de accesibilidad de ParSonic esta habilitado.
+     *
+     * Solo se pide para poder filtrar las teclas de volumen: es la unica forma
+     * que ofrece Android de interceptarlas desde una app en segundo plano. El
+     * servicio se declara con el alcance minimo (`canRetrieveWindowContent`
+     * desactivado), de modo que no puede leer la pantalla.
+     */
+    fun isAccessibilityServiceEnabled(context: Context): Boolean {
+        val flattened = Settings.Secure.getString(
+            context.contentResolver,
+            "enabled_accessibility_services"
+        ) ?: return false
+
+        if (flattened.isBlank()) return false
+
+        return flattened.split(':').any { entry ->
+            ComponentName.unflattenFromString(entry.trim())?.packageName == context.packageName
+        }
+    }
+
+    /**
      * `true` si la app puede dibujar sobre otras aplicaciones.
      *
      * Necesario para capturar gestos tactiles sobre otros reproductores.

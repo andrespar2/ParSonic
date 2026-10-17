@@ -74,6 +74,16 @@ class DataStoreSettingsRepositoryTest {
     }
 
     @Test
+    fun `persiste el control por botones de volumen`() = runTest {
+        val repository = newRepository()
+        assertFalse(repository.settings.first().volumeKeysEnabled)
+
+        repository.setVolumeKeysEnabled(true)
+
+        assertTrue(repository.settings.first().volumeKeysEnabled)
+    }
+
+    @Test
     fun `persiste la accion de un gesto y la sensibilidad global`() = runTest {
         val repository = newRepository()
         repository.setGestureAction(GestureType.SWIPE_LEFT, GestureAction.PAUSE)

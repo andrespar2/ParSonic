@@ -6,6 +6,7 @@
 -keep class com.andrespar2.parsonic.service.MediaNotificationListenerService { *; }
 -keep class com.andrespar2.parsonic.service.GestureService { *; }
 -keep class com.andrespar2.parsonic.service.BootReceiver { *; }
+-keep class com.andrespar2.parsonic.service.volume.VolumeKeyAccessibilityService { *; }
 
 # Callbacks de MediaSessionManager / MediaController (invocados desde el framework).
 -keepclassmembers class * extends android.media.session.MediaController$Callback {

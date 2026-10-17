@@ -59,6 +59,7 @@ class DataStoreSettingsRepository(
         onlyWhilePlaying = this[Keys.ONLY_WHILE_PLAYING] ?: AppSettings.DEFAULT.onlyWhilePlaying,
         touchGesturesEnabled = this[Keys.TOUCH_GESTURES] ?: AppSettings.DEFAULT.touchGesturesEnabled,
         sensorGesturesEnabled = this[Keys.SENSOR_GESTURES] ?: AppSettings.DEFAULT.sensorGesturesEnabled,
+        volumeKeysEnabled = this[Keys.VOLUME_KEYS] ?: AppSettings.DEFAULT.volumeKeysEnabled,
         edgeZoneWidthDp = (this[Keys.EDGE_ZONE_WIDTH] ?: AppSettings.DEFAULT.edgeZoneWidthDp)
             .coerceIn(
                 ParSonicConstants.MIN_EDGE_ZONE_WIDTH_DP,
@@ -88,6 +89,7 @@ class DataStoreSettingsRepository(
         this[Keys.ONLY_WHILE_PLAYING] = settings.onlyWhilePlaying
         this[Keys.TOUCH_GESTURES] = settings.touchGesturesEnabled
         this[Keys.SENSOR_GESTURES] = settings.sensorGesturesEnabled
+        this[Keys.VOLUME_KEYS] = settings.volumeKeysEnabled
         this[Keys.EDGE_ZONE_WIDTH] = settings.edgeZoneWidthDp
         this[Keys.SENSITIVITY] = settings.sensitivity.id
         this[Keys.BOTTOM_ZONE] = settings.bottomZoneEnabled
@@ -108,6 +110,7 @@ class DataStoreSettingsRepository(
         val ONLY_WHILE_PLAYING = booleanPreferencesKey("only_while_playing")
         val TOUCH_GESTURES = booleanPreferencesKey("touch_gestures_enabled")
         val SENSOR_GESTURES = booleanPreferencesKey("sensor_gestures_enabled")
+        val VOLUME_KEYS = booleanPreferencesKey("volume_keys_enabled")
         val EDGE_ZONE_WIDTH = intPreferencesKey("edge_zone_width_dp")
         val SENSITIVITY = stringPreferencesKey("sensitivity")
         val BOTTOM_ZONE = booleanPreferencesKey("bottom_zone_enabled")

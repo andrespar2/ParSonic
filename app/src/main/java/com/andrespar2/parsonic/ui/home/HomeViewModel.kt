@@ -2,6 +2,8 @@ package com.andrespar2.parsonic.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import android.content.Intent
+import android.provider.Settings
 import com.andrespar2.parsonic.data.media.NowPlaying
 import com.andrespar2.parsonic.data.settings.model.AppSettings
 import com.andrespar2.parsonic.di.AppContainer
@@ -45,6 +47,18 @@ class HomeViewModel(private val container: AppContainer) : ViewModel() {
                 GestureService.start(container.appContext)
             }
         }
+    }
+
+    /** Activa o desactiva el control con los botones de volumen. */
+    fun setVolumeKeysEnabled(enabled: Boolean) {
+        viewModelScope.launch { container.settingsRepository.setVolumeKeysEnabled(enabled) }
+    }
+
+    /** Abre los ajustes de accesibilidad del sistema. */
+    fun openAccessibilitySettings() {
+        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        runCatching { container.appContext.startActivity(intent) }
     }
 
     private companion object {

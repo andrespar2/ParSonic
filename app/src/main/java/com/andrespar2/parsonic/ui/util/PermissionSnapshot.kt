@@ -15,7 +15,8 @@ import com.andrespar2.parsonic.core.util.ParSonicPermissions
 data class PermissionSnapshot(
     val notificationAccess: Boolean,
     val overlay: Boolean,
-    val notifications: Boolean
+    val notifications: Boolean,
+    val accessibility: Boolean
 ) {
     /** `true` si estan concedidos todos los accesos obligatorios. */
     val allGranted: Boolean get() = notificationAccess && overlay
@@ -24,7 +25,8 @@ data class PermissionSnapshot(
         fun of(context: Context): PermissionSnapshot = PermissionSnapshot(
             notificationAccess = ParSonicPermissions.isNotificationAccessGranted(context),
             overlay = ParSonicPermissions.canDrawOverlays(context),
-            notifications = ParSonicPermissions.hasNotificationPermission(context)
+            notifications = ParSonicPermissions.hasNotificationPermission(context),
+            accessibility = ParSonicPermissions.isAccessibilityServiceEnabled(context)
         )
     }
 }

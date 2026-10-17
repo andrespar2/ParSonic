@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--
-      Permisos de ParSonic. Deliberadamente NO se usa AccessibilityService,
-      root ni APIs privadas. Cada permiso tiene alternativa menos intrusiva
-      cuando existe.
+      Permisos de ParSonic. La funcion principal no usa root ni APIs privadas.
+      El unico componente de accesibilidad es OPCIONAL y solo filtra las teclas
+      de volumen (ver la declaracion del servicio mas abajo); no esta activo por
+      defecto y no puede leer la pantalla.
     -->
 
     <!-- Servicio en primer plano para mantener vivos los listener de gestos. -->
@@ -88,6 +89,28 @@
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="Captura de gestos tactiles y de sensores para controlar la reproduccion multimedia de otras aplicaciones." />
+        </service>
+
+        <!--
+          Servicio de accesibilidad con el alcance MINIMO posible. Android no
+          ofrece ninguna API publica para interceptar y consumir los botones de
+          volumen desde una app en segundo plano: la unica via es un
+          AccessibilityService con filtrado de teclas. Su configuracion declara
+          canRetrieveWindowContent=false y canPerformGestures=false, y
+          onAccessibilityEvent esta vacio. Esta DESACTIVADO por defecto: solo
+          funciona si el usuario lo habilita y hay un reproductor activo.
+        -->
+        <service
+            android:name=".service.volume.VolumeKeyAccessibilityService"
+            android:exported="true"
+            android:label="@string/accessibility_service_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/volume_key_accessibility_service" />
         </service>
 
         <!-- Inicio automatico opcional. -->

@@ -103,6 +103,23 @@ fun PermissionsScreen() {
             }
         )
 
+        SectionTitle("Botones de volumen (accesibilidad)")
+        PermissionCard(
+            granted = permissions.accessibility,
+            title = "Servicio de accesibilidad",
+            description = "Opcional. Solo se pide para filtrar las teclas de volumen: subir = " +
+                "siguiente, bajar = anterior, doble pulsacion = ajustar el volumen. No lee la " +
+                "pantalla ni el contenido de otras aplicaciones. En Android 13 o posterior, si no " +
+                "puedes activarlo, entra en los ajustes de la app y elige \"Permitir ajustes " +
+                "restringidos\".",
+            onOpen = {
+                context.startActivity(
+                    Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
+            }
+        )
+
         Spacer(Modifier.height(16.dp))
         InfoBanner(
             text = "Privacidad: ParSonic no envia nada a Internet, no tiene cuentas ni " +

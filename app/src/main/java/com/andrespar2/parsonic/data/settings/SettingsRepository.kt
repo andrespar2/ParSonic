@@ -48,6 +48,10 @@ interface SettingsRepository {
     suspend fun setSensorGesturesEnabled(enabled: Boolean) =
         update { it.copy(sensorGesturesEnabled = enabled) }
 
+    /** Activa o desactiva el control por botones de volumen. */
+    suspend fun setVolumeKeysEnabled(enabled: Boolean) =
+        update { it.copy(volumeKeysEnabled = enabled) }
+
     /** Cambia el ancho de las zonas laterales de gesto. */
     suspend fun setEdgeZoneWidth(widthDp: Int) =
         update { it.copy(edgeZoneWidthDp = widthDp) }

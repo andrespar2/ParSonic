@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -40,8 +41,10 @@ import com.andrespar2.parsonic.ui.components.ParSonicCard
 import com.andrespar2.parsonic.ui.components.SectionTitle
 import com.andrespar2.parsonic.ui.components.SettingRow
 import com.andrespar2.parsonic.ui.navigation.Destination
+import com.andrespar2.parsonic.ui.theme.ParAmber
 import com.andrespar2.parsonic.ui.theme.ParGreyDim
 import com.andrespar2.parsonic.ui.theme.ParRed
+import com.andrespar2.parsonic.ui.util.rememberPermissionSnapshot
 
 @Composable
 fun SettingsScreen(
@@ -52,6 +55,7 @@ fun SettingsScreen(
         factory = remember(container) { ParSonicViewModelFactory(container) }
     )
     val settings by viewModel.settings.collectAsStateWithLifecycle()
+    val permissions = rememberPermissionSnapshot()
 
     Column(
         modifier = Modifier
@@ -98,6 +102,37 @@ fun SettingsScreen(
             }
         }
 
+        SectionTitle("Botones de volumen")
+        ParSonicCard {
+            SettingRow(
+                title = "Controlar la musica con el volumen",
+                subtitle = "Una pulsacion cambia de cancion (subir = siguiente, bajar = " +
+                    "anterior); una doble pulsacion ajusta el volumen. Funciona con la pantalla " +
+                    "apagada."
+            ) {
+                Switch(
+                    checked = settings.volumeKeysEnabled,
+                    onCheckedChange = viewModel::setVolumeKeysEnabled
+                )
+            }
+            if (settings.volumeKeysEnabled && !permissions.accessibility) {
+                ParDivider()
+                Text(
+                    text = "Falta activar el servicio de accesibilidad de ParSonic. Android no " +
+                        "permite interceptar los botones de volumen de ninguna otra forma.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = ParAmber
+                )
+                Spacer(Modifier.height(10.dp))
+                Button(
+                    onClick = viewModel::openAccessibilitySettings,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Abrir ajustes de accesibilidad")
+                }
+            }
+        }
+
         SectionTitle("Informacion")
         ParSonicCard {
             KeyValueRow("Version", BuildConfig.VERSION_NAME)
@@ -120,8 +155,9 @@ fun SettingsScreen(
 
         Spacer(Modifier.height(12.dp))
         InfoBanner(
-            text = "ParSonic no usa servicios de accesibilidad, ni root, ni APIs privadas. Toda la " +
-                "informacion sobre reproduccion se queda en tu dispositivo.",
+            text = "ParSonic no usa root ni APIs privadas. Toda la informacion sobre " +
+                "reproduccion se queda en tu dispositivo. El servicio de accesibilidad es " +
+                "opcional y solo filtra las teclas de volumen.",
             tone = ParGreyDim
         )
 

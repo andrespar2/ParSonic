@@ -36,6 +36,18 @@ class SettingsViewModel(private val container: AppContainer) : ViewModel() {
         viewModelScope.launch { container.settingsRepository.setOnlyWhilePlaying(enabled) }
     }
 
+    /** Activa o desactiva el control con los botones de volumen. */
+    fun setVolumeKeysEnabled(enabled: Boolean) {
+        viewModelScope.launch { container.settingsRepository.setVolumeKeysEnabled(enabled) }
+    }
+
+    /** Abre la pantalla de accesibilidad del sistema, donde esta el servicio. */
+    fun openAccessibilitySettings() {
+        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        runCatching { container.appContext.startActivity(intent) }
+    }
+
     /** Abre la pantalla de bateria del sistema, donde esta la optimizacion por app. */
     fun openBatterySettings() {
         val intent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)

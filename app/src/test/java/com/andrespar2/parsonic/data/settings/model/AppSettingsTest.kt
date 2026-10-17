@@ -64,6 +64,7 @@ class AppSettingsTest {
         assertFalse(settings.autostartOnBoot)
         assertTrue(settings.onlyWhilePlaying)
         assertFalse("Los sensores son opcionales y de consumo adicional", settings.sensorGesturesEnabled)
+        assertFalse("Los botones de volumen son opcionales", settings.volumeKeysEnabled)
     }
 
     @Test

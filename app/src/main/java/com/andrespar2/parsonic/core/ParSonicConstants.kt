@@ -48,6 +48,12 @@ object ParSonicConstants {
     /** Ventana (ms) para agrupar eventos de sensores y evitar disparos dobles. */
     const val SENSOR_DEBOUNCE_MS = 800L
 
+    /** Ventana (ms) para considerar dos pulsaciones de un boton de volumen como "doble". */
+    const val VOLUME_DOUBLE_PRESS_WINDOW_MS = 400L
+
+    /** Tiempo (ms) que los botones siguen ajustando volumen tras la ultima pulsacion. */
+    const val VOLUME_MODE_TIMEOUT_MS = 7_000L
+
     /** Accion por defecto cuando no hay reproduccion activa conocida. */
     const val UNKNOWN_MEDIA_LABEL = "Sin reproductor activo"
 }
